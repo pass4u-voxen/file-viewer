@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>파일 뷰어 - 프로그램 없이 바로 열기 | 컴픽스NOW</title>
+<meta name="description" content="엑셀, 한글(hwp·hwpx), PDF, 워드, 파워포인트, 아이폰 사진(HEIC) 파일을 프로그램 설치 없이 브라우저에서 바로 열어 보세요. 파일은 내 컴퓨터 밖으로 나가지 않아요.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>파일 뷰어</h1>
+  <p class="sub">엑셀 · 한글 · PDF · 워드 · 파워포인트 · 사진 파일을 <b>프로그램 설치 없이</b> 바로 열어 보세요.</p>
+  <p class="safe">🔒 파일은 서버로 올라가지 않고 <b>내 컴퓨터(휴대폰) 안에서만</b> 열려요.</p>
+</header>
+
+<main>
+  <label id="drop" class="drop" for="pick">
+    <input id="pick" type="file" hidden>
+    <span class="big">📂</span>
+    <span class="t1">여기에 파일을 끌어다 놓으세요</span>
+    <span class="t2">또는 눌러서 파일 고르기</span>
+  </label>
+
+  <section id="result" hidden>
+    <div id="info" class="info"></div>
+    <div id="warn"></div>
+    <div id="viewer" class="viewer"></div>
+  </section>
+
+  <details class="types">
+    <summary>열 수 있는 파일 종류</summary>
+    <ul>
+      <li><b>엑셀·표</b> .xlsx .xlsm .xlsb .xls .csv .tsv .ods .numbers</li>
+      <li><b>한글</b> .hwp .hwpx <small>(간단 보기, 복잡한 서식은 다르게 보일 수 있어요)</small></li>
+      <li><b>PDF</b> .pdf <small>(비밀번호 PDF 포함)</small></li>
+      <li><b>워드</b> .docx · <b>파워포인트</b> .pptx</li>
+      <li><b>사진</b> .jpg .png .gif .webp .bmp .svg .heic(아이폰) .tif</li>
+      <li><b>글자</b> .txt .md .json .xml .log · <b>압축</b> .zip(안의 파일 목록)</li>
+      <li><b>소리·영상</b> .mp3 .wav .m4a .mp4 .webm</li>
+    </ul>
+  </details>
+</main>
+
+<footer class="help">
+  <p>그래도 안 열리나요? 어떤 화면이 뜨는지 캡처해서 물어봐 주세요.</p>
+  <a class="btn" href="https://cafe.naver.com/comfixnow" target="_blank" rel="noopener">컴픽스NOW 카페에 질문하기</a>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
