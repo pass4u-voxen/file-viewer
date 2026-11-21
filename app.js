@@ -30,7 +30,7 @@ const GUIDE = {
   pdf: [ART(32), 'PDF가 안 열릴 때 확인할 것 (비밀번호·손상된 파일)'],
   exe: [ART(28), '파일 이름 끝의 확장자 보는 법 (가짜 파일 구별하기)'],
 };
-import { initMember, isMember } from './member.js';
+import { isMember, tryPassword } from './member.js';
 const NativeFileReader = window.FileReader; // PptxViewJS가 전역 FileReader를 덮어써서 원래 것을 보관
 
 const $ = (s) => document.querySelector(s);
@@ -49,16 +49,7 @@ const loadScript = (src) => scripts[src] ??= new Promise((ok, no) => {
 });
 
 // ---------- 카페 회원 확인 (수정 기능) ----------
-initMember().then((r) => {
-  const msg = {
-    ok: ['ok', '✅ 카페 회원 확인됐어요. 이 기기에서 PDF 수정 기능을 쓸 수 있어요.'],
-    'bad-ref': ['', '수정 링크는 카페 회원 게시판 글에서 눌러야 열려요. 카페에서 링크를 다시 눌러 주세요.'],
-    'bad-code': ['', '지난 수정 링크예요. 카페 회원 게시판에 올라온 새 링크를 눌러 주세요.'],
-  }[r];
-  const top = document.querySelector('.top');
-  if (msg) top.append(el('p', { class: 'member ' + msg[0] }, msg[1]));
-  else if (isMember()) top.append(el('p', { class: 'member ok' }, '✏️ 카페 회원 — PDF를 열면 "수정하기"를 쓸 수 있어요.'));
-});
+if (isMember()) document.querySelector('.top').append(el('p', { class: 'member ok' }, '✏️ 카페 회원 — PDF를 열면 "수정하기"를 쓸 수 있어요.'));
 
 // ---------- 입력 ----------
 const drop = $('#drop'), pick = $('#pick');
@@ -188,13 +179,22 @@ async function openFile(file, fromZip) {
 }
 
 // 수정은 카페 회원 전용 안내
-function gate() {
+function gate(onOk) {
   $('#warn').innerHTML = '';
   note('', '✏️ 수정은 컴픽스NOW 카페 회원 전용이에요.', '');
   const box = $('#warn').lastElementChild;
-  box.append('카페에 가입한 뒤, 회원 게시판의 "파일 수정 링크"를 눌러 들어오면 이 기기에서 수정할 수 있어요. 보기는 지금처럼 누구나 쓸 수 있어요.', el('br'),
-    el('a', { class: 'btn', href: 'https://cafe.naver.com/comfixnow', target: '_blank', rel: 'noopener' }, '카페 가입하러 가기'));
+  const inp = el('input', { type: 'password', inputmode: 'numeric', autocomplete: 'off', placeholder: '회원 비밀번호', class: 'pw' });
+  const msg = el('span', { class: 'pwmsg' });
+  const go = async () => {
+    if (await tryPassword(inp.value)) { $('#warn').innerHTML = ''; onOk(); }
+    else { msg.textContent = '비밀번호가 맞지 않아요. 회원 전용 도구 게시판의 최신 비밀번호를 확인해 주세요.'; inp.select(); }
+  };
+  inp.addEventListener('keydown', (e) => e.key === 'Enter' && go());
+  box.append('카페 \'회원 전용 도구\' 게시판에 있는 비밀번호를 넣어 주세요. 한 번 넣으면 이 기기에서는 계속 쓸 수 있어요.', el('br'),
+    inp, ' ', el('button', { class: 'pwbtn', onclick: go }, '확인'), ' ', msg, el('br'),
+    '아직 회원이 아니라면 → ', el('a', { href: 'https://cafe.naver.com/comfixnow', target: '_blank', rel: 'noopener' }, '카페 가입하러 가기'), ' (보기는 가입 없이 누구나 쓸 수 있어요)');
   box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  inp.focus();
 }
 
 function guide(type) {
@@ -277,9 +277,11 @@ const RENDER = {
     let scale = 1.4;
     const bar = el('div', { class: 'bar' }, `${doc.numPages}쪽`, el('button', { onclick: () => { scale = Math.max(0.6, scale - 0.2); draw(); } }, '－ 작게'), el('button', { onclick: () => { scale = Math.min(3, scale + 0.2); draw(); } }, '＋ 크게'),
       el('button', { class: 'edit', onclick: async () => {
-        if (!isMember()) return gate();
+        const run = async () => {
         if (locked) return note('', '비밀번호가 걸린 PDF는 수정할 수 없어요.', '보낸 곳에 비밀번호 없는 파일을 요청하거나, 인쇄 → PDF로 저장한 뒤 고쳐 보세요.');
         gen++; const { editPdf } = await import('./edit-pdf.js'); await editPdf({ file, buf, doc, view, el, loadScript });
+        };
+        isMember() ? run() : gate(run);
       } }, '✏️ 수정하기 (서명·글자·쪽 정리)'));
     const pages = el('div');
     view.append(bar, pages);

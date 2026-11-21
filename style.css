@@ -65,3 +65,6 @@ h1{margin:0 0 4px;font-size:28px}
 .modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal-in{background:var(--card);border-radius:14px;padding:16px;max-width:640px;width:100%}
 .pad{width:100%;height:auto;background:#fff;border:1px solid var(--line);border-radius:8px;margin:10px 0;touch-action:none;display:block}
+.pw{padding:8px 10px;font-size:16px;border:1px solid var(--line);border-radius:8px;width:160px;margin-top:8px}
+.pwbtn{padding:8px 14px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
+.pwmsg{color:var(--dangerline);font-size:13px}

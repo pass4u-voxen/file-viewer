@@ -1,11 +1,10 @@
-// 수정 기능은 카페 회원만: 회원 전용 게시판 글의 링크(?m=코드)를 '카페 안에서' 눌러 들어온 경우에만 연다.
-// 코드 원문은 소스에 두지 않고 SHA-256만 둔다. 코드 교체: tools/newcode.sh
+// 수정 기능은 카페 회원만: 회원 전용 게시판(menuId=13) 글에 적힌 비밀번호를 넣어야 열린다.
+// 비밀번호 원문은 소스에 두지 않고 SHA-256만 둔다. 코드 교체: tools/newcode.sh
 const HASHES = [
   // newcode:begin
-  '33b5e5395d71ea379f5629d1e16ed206708c46ef52f9697d5824997432d5c9dc', // 2026-11
+  '12389d5848e00be27439596dff7c2df9a8be58dfba7db9ea8c0197aba0333bea', // 2026-11
   // newcode:end
 ];
-const CAFE_REF = /^https:\/\/(m\.)?cafe\.naver\.com\/(.*cafes\/31647359\b|comfixnow\b|.*clubid=31647359\b)/;
 const KEY = 'fvMember';
 const DAYS = 180; // 코드는 비정기로 바뀜. 코드가 목록에서 빠지면 그때 다시 잠김
 
@@ -14,19 +13,13 @@ async function sha256(s) {
   return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-// 반환: 'ok'(방금 확인됨) | 'bad-ref'(코드는 맞지만 카페 밖에서 열림) | 'bad-code' | null(코드 없음)
-export async function initMember() {
-  const u = new URL(location.href);
-  const m = u.searchParams.get('m');
-  if (!m) return null;
-  u.searchParams.delete('m');
-  history.replaceState(null, '', u.pathname + u.search + u.hash);
-  const h = await sha256(m.trim());
-  if (!HASHES.includes(h)) return 'bad-code';
-  if (!CAFE_REF.test(document.referrer)) return 'bad-ref';
+// 비밀번호(회원 전용 게시판 글에 공지)를 넣으면 이 기기에서 수정 기능이 열린다.
+export async function tryPassword(pw) {
+  const h = await sha256(String(pw).replace(/\s/g, ''));
+  if (!HASHES.includes(h)) return false;
   sessionOk = true; // 저장소가 막힌 브라우저(사생활 보호 모드)라도 이번 방문 동안은 열림
   try { localStorage.setItem(KEY, JSON.stringify({ h, until: Date.now() + DAYS * 864e5 })); } catch {}
-  return 'ok';
+  return true;
 }
 
 let sessionOk = false;
