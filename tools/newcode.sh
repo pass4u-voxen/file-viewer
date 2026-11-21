@@ -2,7 +2,7 @@
 # usage: tools/newcode.sh  — (비정기) 수정 코드를 새로 만들고 member.js에 해시를 넣는다(직전 코드 하나는 남김).
 # 출력된 비밀번호를 카페 회원 전용 도구 게시판(33번 글)에 적는다. 그다음 git commit/push.
 cd "$(dirname "$0")/.."
-CODE=$(LC_ALL=C tr -dc '0-9' < /dev/urandom | head -c 6)
+CODE=$(LC_ALL=C tr -dc 'A-Za-z0-9' < /dev/urandom | head -c 24)
 HASH=$(printf %s "$CODE" | shasum -a 256 | cut -d' ' -f1)
 python3 - "$HASH" "$(date +%Y-%m)" <<'PY'
 import sys,re

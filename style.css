@@ -68,3 +68,4 @@ h1{margin:0 0 4px;font-size:28px}
 .pw{padding:8px 10px;font-size:16px;border:1px solid var(--line);border-radius:8px;width:160px;margin-top:8px}
 .pwbtn{padding:8px 14px;border-radius:8px;border:0;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}
 .pwmsg{color:var(--dangerline);font-size:13px}
+.pw{width:260px;max-width:100%}

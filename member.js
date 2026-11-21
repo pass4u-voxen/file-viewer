@@ -2,7 +2,7 @@
 // 비밀번호 원문은 소스에 두지 않고 SHA-256만 둔다. 코드 교체: tools/newcode.sh
 const HASHES = [
   // newcode:begin
-  '12389d5848e00be27439596dff7c2df9a8be58dfba7db9ea8c0197aba0333bea', // 2026-11
+  '6dabe1449c66e7d38daa0efbc6031ceaa854a8581249520effadd9d70d806d54', // 2026-11
   // newcode:end
 ];
 const KEY = 'fvMember';
