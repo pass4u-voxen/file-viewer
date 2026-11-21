@@ -42,3 +42,26 @@ h1{margin:0 0 4px;font-size:28px}
 .guide span{color:var(--sub);font-size:13px}
 .help .btn{margin:4px}
 .btn2{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.member{margin:8px 0 0;padding:6px 12px;border-radius:8px;border:1px solid var(--warnline);background:var(--warn);font-size:14px;display:inline-block}
+.member.ok{border-color:#2fb36b;background:color-mix(in srgb,#2fb36b 12%,var(--card))}
+.bar button.edit,.bar button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.bar button.on{outline:2px solid var(--accent)}
+.bar.sticky{position:sticky;top:0;z-index:5;background:var(--card);padding:6px 0}
+.bar .hint{color:var(--sub);font-size:13px}
+.bar select{padding:5px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.pbox{margin:0 auto 18px;width:fit-content}
+.pbox.removed .pwrap{opacity:.25}
+.pctl{display:flex;gap:6px;align-items:center;margin-bottom:4px;font-size:13px}
+.pctl button{padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);cursor:pointer;font-size:12px}
+.pwrap{position:relative}
+.pwrap canvas.page{margin:0;max-width:none}
+.layer{position:absolute;inset:0}
+.placing .layer{cursor:crosshair}
+.oitem{position:absolute;padding:0}
+.otext{min-width:40px;min-height:1em;outline:1px dashed var(--accent);color:#000;background:#ffffff80;line-height:1.3;white-space:pre;font-family:"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif}
+.osign{width:150px;display:block;outline:1px dashed var(--accent);margin:0}
+.ohandle,.odel{position:absolute;top:-20px;width:20px;height:20px;line-height:20px;text-align:center;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;cursor:move;user-select:none}
+.ohandle{left:-2px}.odel{left:22px;background:#e5484d;cursor:pointer}
+.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal-in{background:var(--card);border-radius:14px;padding:16px;max-width:640px;width:100%}
+.pad{width:100%;height:auto;background:#fff;border:1px solid var(--line);border-radius:8px;margin:10px 0;touch-action:none;display:block}
