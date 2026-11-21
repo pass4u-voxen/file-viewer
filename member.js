@@ -6,7 +6,7 @@ const HASHES = [
   // newcode:end
 ];
 const KEY = 'fvMember';
-const DAYS = 180; // 코드는 비정기로 바뀜. 코드가 목록에서 빠지면 그때 다시 잠김
+const DAYS = 30; // 비밀번호가 바뀌면(해시가 목록에서 빠지면) 기간과 상관없이 바로 잠김
 
 async function sha256(s) {
   const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));

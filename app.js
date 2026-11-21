@@ -187,10 +187,10 @@ function gate(onOk) {
   const msg = el('span', { class: 'pwmsg' });
   const go = async () => {
     if (await tryPassword(inp.value)) { $('#warn').innerHTML = ''; onOk(); }
-    else { msg.textContent = '비밀번호가 맞지 않아요. 회원 전용 도구 게시판의 최신 비밀번호를 확인해 주세요.'; inp.select(); }
+    else { msg.textContent = '비밀번호가 맞지 않아요. 비밀번호가 바뀌었을 수 있으니 회원 전용 도구 게시판에서 새 비밀번호를 복사해 주세요.'; inp.select(); }
   };
   inp.addEventListener('keydown', (e) => e.key === 'Enter' && go());
-  box.append('카페 \'회원 전용 도구\' 게시판 글의 비밀번호를 복사해서 붙여넣어 주세요. 한 번 넣으면 이 기기에서는 계속 쓸 수 있어요.', el('br'),
+  box.append('카페 \'회원 전용 도구\' 게시판 글의 비밀번호를 복사해서 붙여넣어 주세요. 비밀번호는 자주 바뀌어요. 바뀌면 새 비밀번호를 다시 넣어야 해요.', el('br'),
     inp, ' ', el('button', { class: 'pwbtn', onclick: go }, '확인'), ' ', msg, el('br'),
     '아직 회원이 아니라면 → ', el('a', { href: 'https://cafe.naver.com/comfixnow', target: '_blank', rel: 'noopener' }, '카페 가입하러 가기'), ' (보기는 가입 없이 누구나 쓸 수 있어요)');
   box.scrollIntoView({ behavior: 'smooth', block: 'center' });
