@@ -14,6 +14,22 @@ const CDN = {
   rhwpWasm: 'https://cdn.jsdelivr.net/npm/@rhwp/core@0.8.7/rhwp_bg.wasm',
 };
 const CAFE = 'https://cafe.naver.com/comfixnow';
+const ASK = 'https://cafe.naver.com/f-e/cafes/31647359/menus/9'; // 'PC 고장 질문' 게시판
+// 형식별로 이어 읽을 카페 글 (가입 없이 읽기 가능한 연재 게시판 '오피스·문서 파일 기초')
+const ART = (n) => `${CAFE}/${n}`;
+const GUIDE = {
+  xlsx: [ART(27), '엑셀이 없어도 파일 여는 법, 무료로 고치는 법'],
+  xls: [ART(27), '엑셀이 없어도 파일 여는 법, 무료로 고치는 법'],
+  ods: [ART(27), '엑셀이 없어도 파일 여는 법, 무료로 고치는 법'],
+  csv: [ART(27), '엑셀이 없어도 파일 여는 법, 무료로 고치는 법'],
+  numbers: [ART(27), '엑셀이 없어도 파일 여는 법, 무료로 고치는 법'],
+  docx: [ART(27), '워드가 없어도 파일 여는 법, 무료로 고치는 법'],
+  pptx: [ART(27), '파워포인트가 없어도 파일 여는 법'],
+  hwp: [ART(30), '한글 파일을 무료로 열고 고치는 법'],
+  hwpx: [ART(30), '한글 파일을 무료로 열고 고치는 법'],
+  pdf: [ART(32), 'PDF가 안 열릴 때 확인할 것 (비밀번호·손상된 파일)'],
+  exe: [ART(28), '파일 이름 끝의 확장자 보는 법 (가짜 파일 구별하기)'],
+};
 const NativeFileReader = window.FileReader; // PptxViewJS가 전역 FileReader를 덮어써서 원래 것을 보관
 
 const $ = (s) => document.querySelector(s);
@@ -121,7 +137,7 @@ const sizeText = (n) => n > 1048576 ? (n / 1048576).toFixed(1) + 'MB' : Math.max
 let history = [];
 async function openFile(file, fromZip) {
   if (!fromZip) history = [];
-  $('#result').hidden = false; $('#warn').innerHTML = ''; view.innerHTML = '';
+  $('#result').hidden = false; $('#warn').innerHTML = ''; $('#guide').innerHTML = ''; view.innerHTML = '';
   view.append(el('div', { class: 'loading' }, '파일을 확인하는 중이에요…'));
   $('#result').scrollIntoView({ behavior: 'smooth', block: 'start' });
   const buf = await file.arrayBuffer();
@@ -139,7 +155,7 @@ async function openFile(file, fromZip) {
     note('danger', '⚠️ 이 파일은 문서가 아니라 "프로그램(실행 파일)"이에요.', extGroup !== 'exe'
       ? `이름은 .${ext} 처럼 보이지만 실제로는 프로그램이에요. 문서로 위장한 악성 파일일 수 있으니 절대 실행하지 마세요.`
       : '모르는 곳에서 받은 프로그램은 실행하지 마세요. 이 뷰어는 프로그램 파일을 열지 않아요.');
-    view.innerHTML = ''; return;
+    view.innerHTML = ''; guide('exe'); return;
   }
   if (parts.length > 2 && EXT_GROUP.exe.includes(parts.at(-1)) ) note('danger', '⚠️ 이름 끝에 프로그램 확장자가 붙어 있어요.', '문서처럼 보이게 이름을 꾸민 파일일 수 있어요. 실행하지 마세요.');
   const same = (a, b) => a === b || (a === 'xlsx' && ['xls', 'csv', 'ods'].includes(b)) || (a === 'image' && b === 'image');
@@ -149,12 +165,19 @@ async function openFile(file, fromZip) {
   try {
     view.innerHTML = '';
     await (RENDER[type] || RENDER.unknown)(file, buf, type, ext);
+    guide(type);
   } catch (err) {
     console.error(err);
     view.innerHTML = '';
     note('danger', '이 파일은 여기서 열지 못했어요.', String(err?.message || err).slice(0, 200));
     view.append(helpBox(type));
   }
+}
+
+function guide(type) {
+  const g = GUIDE[type]; const box = $('#guide'); box.innerHTML = '';
+  if (!g) return;
+  box.append(el('a', { href: g[0], target: '_blank', rel: 'noopener' }, '📖 ' + g[1]), el('span', {}, ' · 컴픽스NOW 카페 글, 가입 없이 읽을 수 있어요'));
 }
 
 function helpBox(type) {
@@ -165,7 +188,7 @@ function helpBox(type) {
     ppt: '옛 파워포인트(.ppt) 파일은 여기서 열 수 없어요. 보낸 분께 .pptx 나 PDF로 다시 보내 달라고 해 주세요.',
     zip: '압축이 깨졌거나 암호가 걸린 압축 파일일 수 있어요. 반디집 같은 압축 프로그램으로 풀어 보세요.',
   };
-  return el('div', { class: 'msg' }, el('b', {}, '이렇게 해 보세요'), tips[type] || '파일이 덜 내려받아졌거나 손상됐을 수 있어요. 다시 내려받아 보거나, 어떤 파일인지 카페에 물어봐 주세요.', el('br'), el('a', { href: CAFE, target: '_blank', rel: 'noopener' }, '👉 컴픽스NOW 카페에 질문하기'));
+  return el('div', { class: 'msg' }, el('b', {}, '이렇게 해 보세요'), tips[type] || '파일이 덜 내려받아졌거나 손상됐을 수 있어요. 다시 내려받아 보거나, 어떤 파일인지 카페에 물어봐 주세요.', el('br'), el('a', { href: ASK, target: '_blank', rel: 'noopener' }, '👉 카페 \'PC 고장 질문\'에 물어보기'), ' (질문 글은 카페 가입 후 쓸 수 있어요)', el('br'), el('small', {}, '파일을 올릴 땐 주민번호·계좌 같은 개인정보가 든 파일은 빼고, 화면 캡처로 보여 주세요.'));
 }
 
 // ---------- 형식별 뷰어 ----------

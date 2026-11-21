@@ -36,3 +36,9 @@ h1{margin:0 0 4px;font-size:28px}
 .help{padding-bottom:40px;text-align:center;color:var(--sub)}
 .btn{display:inline-block;padding:10px 18px;border-radius:10px;background:#03c75a;color:#fff;font-weight:700;text-decoration:none}
 .docx-wrapper{background:transparent!important;padding:0!important}
+.guide:empty{display:none}
+.guide{margin:-12px 0 24px;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:15px}
+.guide a{color:var(--accent);font-weight:700}
+.guide span{color:var(--sub);font-size:13px}
+.help .btn{margin:4px}
+.btn2{background:var(--card);color:var(--ink);border:1px solid var(--line)}
