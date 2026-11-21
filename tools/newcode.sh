@@ -1,5 +1,5 @@
 #!/bin/zsh
-# usage: tools/newcode.sh  — 이번 달 수정 코드를 새로 만들고 member.js에 해시를 넣는다(직전 코드 하나는 남김).
+# usage: tools/newcode.sh  — (비정기) 수정 코드를 새로 만들고 member.js에 해시를 넣는다(직전 코드 하나는 남김).
 # 출력된 링크를 카페 회원 전용 게시판 글에 넣는다. 그다음 git commit/push.
 cd "$(dirname "$0")/.."
 CODE=$(LC_ALL=C tr -dc 'a-z0-9' < /dev/urandom | head -c 8)

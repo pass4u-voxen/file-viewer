@@ -7,7 +7,7 @@ const HASHES = [
 ];
 const CAFE_REF = /^https:\/\/(m\.)?cafe\.naver\.com\/(.*cafes\/31647359\b|comfixnow\b|.*clubid=31647359\b)/;
 const KEY = 'fvMember';
-const DAYS = 40;
+const DAYS = 180; // 코드는 비정기로 바뀜. 코드가 목록에서 빠지면 그때 다시 잠김
 
 async function sha256(s) {
   const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
