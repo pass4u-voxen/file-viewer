@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내 컴퓨터 사양 정리 - DxDiag 파일로 바로 | 컴픽스NOW</title>
+<meta name="description" content="윈도우 기본 도구 DxDiag로 저장한 파일을 넣으면 CPU·램·그래픽카드·저장장치 사양을 카페에 올리기 좋은 글로 정리해 드려요. 설치 없이, 파일은 내 컴퓨터 밖으로 나가지 않아요.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <h1>내 컴퓨터 사양 정리</h1>
+  <p class="sub">윈도우에 원래 있는 <b>DirectX 진단 도구(dxdiag)</b> 파일을 넣으면, 카페에 올리기 좋은 사양 글로 바꿔 드려요.</p>
+  <p class="safe">🔒 파일은 서버로 올라가지 않아요. 컴퓨터 이름·사용자 이름 같은 정보는 <b>글에 넣지 않아요</b>.</p>
+</header>
+
+<main>
+  <details class="types" open>
+    <summary>DxDiag 파일 만드는 법 (1분)</summary>
+    <ol class="steps">
+      <li>화면 아래 <b>시작(윈도우 버튼)</b>을 누르고 <b>dxdiag</b> 라고 입력한 뒤, 나온 <b>dxdiag</b>를 눌러요.</li>
+      <li>"디지털 서명을 확인할까요?" 창이 뜨면 <b>예</b>를 눌러요.</li>
+      <li>창 아래 초록 막대가 끝날 때까지 기다린 뒤 <b>모든 정보 저장</b>을 눌러요.</li>
+      <li><b>바탕 화면</b>에 저장해요. 파일 이름은 <b>DxDiag.txt</b> 예요.</li>
+      <li>그 파일을 아래 칸에 끌어다 놓으면 끝!</li>
+    </ol>
+    <p class="note">dxdiag는 마이크로소프트가 윈도우에 넣어 둔 기본 도구예요. 따로 설치하거나 명령어를 붙여넣을 필요가 없어요.</p>
+  </details>
+
+  <label id="drop" class="drop" for="pick">
+    <input id="pick" type="file" accept=".txt,text/plain" hidden>
+    <span class="big">🖥️</span>
+    <span class="t1">DxDiag.txt 파일을 여기에 끌어다 놓으세요</span>
+    <span class="t2">또는 눌러서 파일 고르기</span>
+  </label>
+
+  <section id="result" hidden>
+    <div id="warn"></div>
+    <div class="bar">
+      <button id="copy" class="primary">📋 글 복사하기</button>
+      <a class="btn" id="post" href="https://cafe.naver.com/f-e/cafes/31647359/menus/9" target="_blank" rel="noopener">카페에 올리러 가기</a>
+      <span class="hint" id="copied"></span>
+    </div>
+    <textarea id="out" class="out" rows="16" spellcheck="false"></textarea>
+    <p class="note">아래 [궁금한 점] 칸을 채워서 올리면 더 정확하게 조언받을 수 있어요. 글 내용은 여기서 바로 고칠 수 있어요.</p>
+  </section>
+</main>
+
+<footer class="help">
+  <p>컴퓨터 문제를 쉬운 말로 정리하는 <b>컴픽스NOW</b> 카페예요. 사양을 올리면 업그레이드·고장 조언을 받을 수 있어요.</p>
+  <a class="btn" href="https://cafe.naver.com/comfixnow" target="_blank" rel="noopener">카페 가기</a>
+  <a class="btn btn2" href="./">파일 뷰어</a>
+</footer>
+
+<script type="module" src="spec.js"></script>
+</body>
+</html>
