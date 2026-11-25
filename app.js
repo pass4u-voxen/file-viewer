@@ -31,6 +31,7 @@ const GUIDE = {
   exe: [ART(28), '파일 이름 끝의 확장자 보는 법 (가짜 파일 구별하기)'],
 };
 import { isMember, tryPassword } from './member.js';
+import { track } from './count.js';
 const NativeFileReader = window.FileReader; // PptxViewJS가 전역 FileReader를 덮어써서 원래 것을 보관
 
 const $ = (s) => document.querySelector(s);
@@ -147,6 +148,7 @@ async function openFile(file, fromZip) {
   const buf = await file.arrayBuffer();
   let type;
   try { type = await detect(file, buf); } catch { type = 'unknown'; }
+  if (!fromZip) track('open-' + type);
   const ext = extOf(file.name);
   const info = $('#info'); info.innerHTML = '';
   info.append(el('span', { class: 'name' }, file.name), el('span', { class: 'tag' }, LABEL[type] || LABEL.unknown), el('span', {}, sizeText(file.size)));
@@ -186,7 +188,7 @@ function gate(onOk) {
   const inp = el('input', { type: 'password', autocomplete: 'off', placeholder: '여기에 붙여넣기', class: 'pw' });
   const msg = el('span', { class: 'pwmsg' });
   const go = async () => {
-    if (await tryPassword(inp.value)) { $('#warn').innerHTML = ''; onOk(); }
+    if (await tryPassword(inp.value)) { track('edit-unlock'); $('#warn').innerHTML = ''; onOk(); }
     else { msg.textContent = '비밀번호가 맞지 않아요. 비밀번호가 바뀌었을 수 있으니 회원 전용 도구 게시판에서 새 비밀번호를 복사해 주세요.'; inp.select(); }
   };
   inp.addEventListener('keydown', (e) => e.key === 'Enter' && go());
@@ -281,6 +283,7 @@ const RENDER = {
         if (locked) return note('', '비밀번호가 걸린 PDF는 수정할 수 없어요.', '보낸 곳에 비밀번호 없는 파일을 요청하거나, 인쇄 → PDF로 저장한 뒤 고쳐 보세요.');
         gen++; const { editPdf } = await import('./edit-pdf.js'); await editPdf({ file, buf, doc, view, el, loadScript });
         };
+        track(isMember() ? 'edit-member' : 'edit-gate');
         isMember() ? run() : gate(run);
       } }, '✏️ 수정하기 (서명·글자·쪽 정리)'));
     const pages = el('div');

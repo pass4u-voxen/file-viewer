@@ -1,4 +1,5 @@
 import { decode, parse, toPost } from './spec-parse.js';
+import { track } from './count.js';
 
 const $ = (s) => document.querySelector(s);
 const drop = $('#drop');
@@ -9,6 +10,7 @@ async function handle(file) {
   $('#warn').innerHTML = '';
   if (file.size > 20 * 1024 * 1024) return warn('파일이 너무 커요. dxdiag에서 저장한 DxDiag.txt 파일이 맞는지 확인해 주세요.');
   const r = parse(decode(await file.arrayBuffer()));
+  track(r.ok ? 'spec-ok' : 'spec-fail');
   if (!r.ok) {
     $('#out').value = '';
     return warn('사양을 찾지 못했어요. dxdiag 창에서 <b>모든 정보 저장</b>으로 만든 DxDiag.txt 파일인지 확인해 주세요.');
@@ -29,6 +31,7 @@ drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove
 
 $('#copy').addEventListener('click', async () => {
   const t = $('#out').value;
+  track('spec-copy');
   try { await navigator.clipboard.writeText(t); } catch { $('#out').select(); document.execCommand('copy'); }
   $('#copied').textContent = '복사했어요! 카페 글쓰기 화면에 붙여넣기(Ctrl+V) 하세요.';
 });
